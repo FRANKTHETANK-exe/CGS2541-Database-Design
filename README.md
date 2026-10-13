@@ -1,5 +1,9 @@
 # CGS2541 Database Design
 
-My database assignments, including an NPC emotion schema, queries, a view, SQL exercises, and ER diagrams.
+SQL exercises and relational database models for CGS2541.
 
-The SQL is kept as I submitted it. Some statements may need changes for the database you use.
+- [NPC Emotional Response](npc-emotional-response/) — SQL Server schema, queries, a view, and ER diagrams for game character interactions.
+- [Equipment Rental](equipment-rental/erd.png) — Entity-relationship diagram for an equipment rental system.
+- [SQL Practice](sql-practice/) — Single-table queries, joins, subqueries, inserts, updates, and deletes.
+
+The SQL practice files require the Music Shop sample database, which is not included.
