@@ -1,0 +1,66 @@
+
+-- Create Tables
+
+CREATE TABLE Players (
+    PlayerID INT PRIMARY KEY IDENTITY(1000,1),
+    PlayerName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Emotions (
+    EmotionID INT PRIMARY KEY IDENTITY(1,1),
+    EmotionName VARCHAR(20) UNIQUE NOT NULL,
+    Description VARCHAR(100) NULL
+);
+
+CREATE TABLE NPC (
+    NPCID INT PRIMARY KEY IDENTITY(2000,1),
+    NPCName VARCHAR(50) NOT NULL,
+    PersonalityType VARCHAR(20) NOT NULL,
+    CurrentEmotionID INT NOT NULL,
+    EmotionPoints INT DEFAULT 0 NOT NULL,
+    FOREIGN KEY (CurrentEmotionID) REFERENCES Emotions(EmotionID)
+);
+
+CREATE TABLE Actions (
+    ActionID INT PRIMARY KEY IDENTITY(1,1),
+    ActionName VARCHAR(50) NOT NULL,
+    Impact INT NOT NULL CHECK (Impact BETWEEN -10 AND 10)
+);
+
+CREATE TABLE Interactions (
+    InteractionID INT PRIMARY KEY IDENTITY(1,1),
+    PlayerID INT NOT NULL,
+    NPCID INT NOT NULL,
+    ActionID INT NOT NULL,
+    InteractionTime DATETIME DEFAULT GETDATE() NOT NULL,
+    FOREIGN KEY (PlayerID) REFERENCES Players(PlayerID),
+    FOREIGN KEY (NPCID) REFERENCES NPC(NPCID),
+    FOREIGN KEY (ActionID) REFERENCES Actions(ActionID)
+);
+
+CREATE TABLE EmotionCalculations (
+    ECID INT PRIMARY KEY IDENTITY(1,1),
+    EmotionID INT NOT NULL,
+    PersonalityType VARCHAR(20) NOT NULL,
+    LowRange INT NOT NULL,
+    HighRange INT NOT NULL,
+    FOREIGN KEY (EmotionID) REFERENCES Emotions(EmotionID)
+);
+
+CREATE TABLE EmotionsHistory (
+    ChangeID INT PRIMARY KEY IDENTITY(1,1),
+    NPCID INT NOT NULL,
+    ChangeTime DATETIME DEFAULT GETDATE() NOT NULL,
+    OldEmotionID INT NOT NULL,
+    NewEmotionID INT NOT NULL,
+    InteractionID INT NOT NULL,
+    FOREIGN KEY (NPCID) REFERENCES NPC(NPCID),
+    FOREIGN KEY (OldEmotionID) REFERENCES Emotions(EmotionID),
+    FOREIGN KEY (NewEmotionID) REFERENCES Emotions(EmotionID),
+    FOREIGN KEY (InteractionID) REFERENCES Interactions(InteractionID)
+);
+
+-- Create Indexes
+CREATE INDEX idx_PlayerName ON Players(PlayerName);
+CREATE INDEX idx_NPCName ON NPC(NPCName);
+CREATE INDEX idx_ActionName ON Actions(ActionName);
